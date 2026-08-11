@@ -12,7 +12,8 @@ export default async function ContactsPage({
   let query = supabase.from('contacts').select('*').order('created_at', { ascending: false })
 
   if (q) {
-    query = query.or(`name.ilike.%${q}%,email.ilike.%${q}%`)
+    const escapedQ = q.replace(/[,()%_.*\\]/g, (c) => `\\${c}`)
+    query = query.or(`name.ilike.%${escapedQ}%,email.ilike.%${escapedQ}%`)
   }
 
   const { data: contacts } = await query

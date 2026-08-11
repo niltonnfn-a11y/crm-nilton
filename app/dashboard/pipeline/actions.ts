@@ -1,7 +1,9 @@
 'use server'
 
 import { redirect } from 'next/navigation'
+import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import type { Stage } from '@/types/database'
 
 export async function createDeal(formData: FormData) {
   const supabase = await createClient()
@@ -18,4 +20,15 @@ export async function createDeal(formData: FormData) {
   })
 
   redirect('/dashboard/pipeline')
+}
+
+export async function moveDealStage(dealId: string, stage: Stage) {
+  const supabase = await createClient()
+  await supabase
+    .from('deals')
+    .update({ stage, updated_at: new Date().toISOString() })
+    .eq('id', dealId)
+
+  revalidatePath('/dashboard/pipeline')
+  revalidatePath('/dashboard')
 }

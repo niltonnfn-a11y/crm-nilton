@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { STAGES, type Stage } from '@/types/database'
+import { StageSelect } from './StageSelect'
 
 type DealWithContact = {
   id: string
@@ -48,6 +49,7 @@ export default async function PipelinePage() {
                         currency: 'BRL',
                       }).format(deal.value)}
                     </p>
+                    <StageSelect dealId={deal.id} currentStage={deal.stage} />
                   </div>
                 ))}
             </div>

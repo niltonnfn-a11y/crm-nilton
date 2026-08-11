@@ -24,10 +24,15 @@ export async function createDeal(formData: FormData) {
 
 export async function moveDealStage(dealId: string, stage: Stage) {
   const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
   await supabase
     .from('deals')
     .update({ stage, updated_at: new Date().toISOString() })
     .eq('id', dealId)
+    .eq('user_id', user!.id)
 
   revalidatePath('/dashboard/pipeline')
   revalidatePath('/dashboard')

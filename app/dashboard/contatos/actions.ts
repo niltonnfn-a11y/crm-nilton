@@ -23,6 +23,9 @@ export async function createContact(formData: FormData) {
 
 export async function updateContact(id: string, formData: FormData) {
   const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
   await supabase
     .from('contacts')
@@ -34,12 +37,17 @@ export async function updateContact(id: string, formData: FormData) {
       notes: (formData.get('notes') as string) || null,
     })
     .eq('id', id)
+    .eq('user_id', user!.id)
 
   redirect('/dashboard/contatos')
 }
 
 export async function deleteContact(id: string) {
   const supabase = await createClient()
-  await supabase.from('contacts').delete().eq('id', id)
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  await supabase.from('contacts').delete().eq('id', id).eq('user_id', user!.id)
   redirect('/dashboard/contatos')
 }

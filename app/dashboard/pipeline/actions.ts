@@ -11,9 +11,22 @@ export async function createDeal(formData: FormData) {
     data: { user },
   } = await supabase.auth.getUser()
 
+  const contactId = formData.get('contact_id') as string
+
+  const { data: contact } = await supabase
+    .from('contacts')
+    .select('id')
+    .eq('id', contactId)
+    .eq('user_id', user!.id)
+    .single()
+
+  if (!contact) {
+    throw new Error('Contato inválido.')
+  }
+
   await supabase.from('deals').insert({
     user_id: user!.id,
-    contact_id: formData.get('contact_id') as string,
+    contact_id: contactId,
     title: formData.get('title') as string,
     value: Number(formData.get('value')),
     stage: 'novo',

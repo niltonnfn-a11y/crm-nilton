@@ -17,9 +17,9 @@ export default function Home() {
       </main>
 
       <footer className="border-t border-slate-200 bg-white px-4 py-6 text-center text-xs text-slate-500">
+        <p>E-mail: nfntecnologia@seuminisitio.com.br</p>
         <p>CNPJ: 31.425.806/0001-55</p>
         <p>Endereço: R. Alcaide Mór Camargo, 95 - Taubaté/SP - CEP 12010-240</p>
-        <p>E-mail: nfntecnologia@seuminisitio.com.br</p>
       </footer>
     </div>
   )
